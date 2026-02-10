@@ -34,9 +34,9 @@ export async function notifyAccessRequest(
 
   if (!brand) return
 
-  const notifications = brand.company.users.map(user => ({
+  const notifications = brand.company.users.map((user: any) => ({
     recipientId: user.id,
-    type: NotificationType.ACCESS_REQUEST,
+    type: 'ACCESS_REQUEST',
     title: 'New Access Request',
     content: `${requesterCompanyName} has requested access to your brand "${brand.name}"`,
   }))
@@ -60,9 +60,9 @@ export async function notifyAccessApproved(
 
   if (!company) return
 
-  const notifications = company.users.map(user => ({
+  const notifications = company.users.map((user: any) => ({
     recipientId: user.id,
-    type: NotificationType.ACCESS_APPROVED,
+    type: 'ACCESS_APPROVED',
     title: 'Access Approved',
     content: `Your access request to "${brandName}" has been approved`,
   }))
@@ -86,9 +86,9 @@ export async function notifyAccessDenied(
 
   if (!company) return
 
-  const notifications = company.users.map(user => ({
+  const notifications = company.users.map((user: any) => ({
     recipientId: user.id,
-    type: NotificationType.ACCESS_DENIED,
+    type: 'ACCESS_DENIED',
     title: 'Access Denied',
     content: `Your access request to "${brandName}" has been denied`,
   }))
@@ -126,9 +126,9 @@ export async function notifyNewAssets(
   const allNotifications: any[] = []
 
   accessRequests.forEach(request => {
-    const notifications = request.requesterCompany.users.map(user => ({
+    const notifications = request.requesterCompany.users.map((user: any) => ({
       recipientId: user.id,
-      type: NotificationType.NEW_ASSETS,
+      type: 'NEW_ASSETS',
       title: 'New Assets Available',
       content: `${assetCount} new asset${assetCount > 1 ? 's' : ''} ${assetCount > 1 ? 'have' : 'has'} been added to "${brand.name}"`,
     }))
