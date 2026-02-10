@@ -1,9 +1,8 @@
 import { prisma } from './db'
-import { NotificationType } from '@prisma/client'
 
 export async function createNotification(
   recipientId: string,
-  type: NotificationType,
+  type: string,
   title: string,
   content: string
 ) {
