@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server'
 import { getAuthUser } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-import { AccessRequest } from '@prisma/client'
 
 export async function GET(
   request: NextRequest,
@@ -46,7 +45,7 @@ export async function GET(
 
     // Check access permissions
     const hasAccess = isOwnBrand || 
-      brand.receivedAccessRequests.some((req: AccessRequest) => req.status === 'APPROVED')
+      brand.receivedAccessRequests.some((req: any) => req.status === 'APPROVED')
 
     if (!hasAccess && !isOwnBrand) {
       // Return limited info if no access
@@ -72,9 +71,9 @@ export async function GET(
     // Calculate asset counts
     const assetCounts = {
       total: brand.assets.length,
-      logos: brand.assets.filter(a => a.category === 'LOGO').length,
-      products: brand.assets.filter(a => a.category === 'PRODUCT').length,
-      campaigns: brand.assets.filter(a => a.category === 'CAMPAIGN').length,
+      logos: brand.assets.filter((a: any) => a.category === 'LOGO').length,
+      products: brand.assets.filter((a: any) => a.category === 'PRODUCT').length,
+      campaigns: brand.assets.filter((a: any) => a.category === 'CAMPAIGN').length,
     }
 
     // Return full brand data with access
