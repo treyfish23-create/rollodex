@@ -9,7 +9,7 @@ export async function createNotification(
   return await prisma.notification.create({
     data: {
       recipientId,
-      type,
+      type: type as any,
       title,
       content,
     },
@@ -36,7 +36,7 @@ export async function notifyAccessRequest(
 
   const notifications = brand.company.users.map((user: any) => ({
     recipientId: user.id,
-    type: 'ACCESS_REQUEST',
+    type: 'ACCESS_REQUEST' as any,
     title: 'New Access Request',
     content: `${requesterCompanyName} has requested access to your brand "${brand.name}"`,
   }))
@@ -62,7 +62,7 @@ export async function notifyAccessApproved(
 
   const notifications = company.users.map((user: any) => ({
     recipientId: user.id,
-    type: 'ACCESS_APPROVED',
+    type: 'ACCESS_APPROVED' as any,
     title: 'Access Approved',
     content: `Your access request to "${brandName}" has been approved`,
   }))
@@ -88,7 +88,7 @@ export async function notifyAccessDenied(
 
   const notifications = company.users.map((user: any) => ({
     recipientId: user.id,
-    type: 'ACCESS_DENIED',
+    type: 'ACCESS_DENIED' as any,
     title: 'Access Denied',
     content: `Your access request to "${brandName}" has been denied`,
   }))
@@ -128,7 +128,7 @@ export async function notifyNewAssets(
   accessRequests.forEach((request: any) => {
     const notifications = request.requesterCompany.users.map((user: any) => ({
       recipientId: user.id,
-      type: 'NEW_ASSETS',
+      type: 'NEW_ASSETS' as any,
       title: 'New Assets Available',
       content: `${assetCount} new asset${assetCount > 1 ? 's' : ''} ${assetCount > 1 ? 'have' : 'has'} been added to "${brand.name}"`,
     }))
