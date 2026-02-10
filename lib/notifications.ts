@@ -125,7 +125,7 @@ export async function notifyNewAssets(
 
   const allNotifications: any[] = []
 
-  accessRequests.forEach(request => {
+  accessRequests.forEach((request: any) => {
     const notifications = request.requesterCompany.users.map((user: any) => ({
       recipientId: user.id,
       type: 'NEW_ASSETS',

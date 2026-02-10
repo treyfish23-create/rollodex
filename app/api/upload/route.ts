@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     await uploadFile(fileBuffer, fileKey, file.type)
 
     // Parse tags
-    const tagArray = tags ? tags.split(',').map(tag => tag.trim()).filter(Boolean) : []
+    const tagArray = tags ? tags.split(',').map((tag: string) => tag.trim()).filter(Boolean) : []
 
     // Save asset to database
     const asset = await prisma.asset.create({
