@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/db'
 import { hashPassword, generateToken, createAuthResponse } from '@/lib/auth'
 import { createStripeCustomer } from '@/lib/stripe'
+import { Prisma } from '@prisma/client'
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await hashPassword(password)
 
     // Create company and user in a transaction
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Create company
       const company = await tx.company.create({
         data: {
