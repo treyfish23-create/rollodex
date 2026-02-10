@@ -78,7 +78,6 @@ model Company {
   users                 User[]
   brand                 Brand?
   accessRequests        AccessRequest[]    @relation("RequesterCompany")
-  receivedAccessRequests AccessRequest[]   @relation("TargetBrand")
   notes                 Note[]
   
   createdAt DateTime @default(now())
