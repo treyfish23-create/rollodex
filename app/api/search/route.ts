@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { getAuthUser } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { Brand, Asset } from '@prisma/client'
 
 export async function GET(request: NextRequest) {
   try {
@@ -70,12 +71,12 @@ export async function GET(request: NextRequest) {
       company: brand.company,
       assetCounts: {
         total: brand.assets.length,
-        logos: brand.assets.filter(a => a.category === 'LOGO').length,
-        products: brand.assets.filter(a => a.category === 'PRODUCT').length,
-        campaigns: brand.assets.filter(a => a.category === 'CAMPAIGN').length,
+        logos: brand.assets.filter((a: Asset) => a.category === 'LOGO').length,
+        products: brand.assets.filter((a: Asset) => a.category === 'PRODUCT').length,
+        campaigns: brand.assets.filter((a: Asset) => a.category === 'CAMPAIGN').length,
       },
       lastUpdated: brand.assets.length > 0 
-        ? Math.max(...brand.assets.map(a => new Date(a.createdAt).getTime()))
+        ? Math.max(...brand.assets.map((a: Asset) => new Date(a.createdAt).getTime()))
         : new Date(brand.updatedAt).getTime(),
       accessStatus: brand.receivedAccessRequests.length > 0 
         ? brand.receivedAccessRequests[0].status 
