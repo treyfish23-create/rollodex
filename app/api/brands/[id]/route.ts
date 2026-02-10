@@ -56,44 +56,47 @@ export async function GET(
           name: brand.name,
           about: brand.about,
           website: brand.website,
-          company: brand.company,
-          hasAccess: false,
-          accessStatus: brand.receivedAccessRequests[0]?.status || null
+          company: {
+            name: brand.company.name
+          },
+          assetCounts: {
+            total: 0,
+            logos: 0,
+            products: 0,
+            campaigns: 0
+          }
         }
       }), { status: 200 })
     }
 
-    // Get user's notes for this brand
-    const notes = await prisma.note.findMany({
-      where: {
-        brandId: brandId,
-        companyId: user.companyId
-      },
-      include: {
-        author: {
-          select: {
-            firstName: true,
-            lastName: true
-          }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
+    // Calculate asset counts
+    const assetCounts = {
+      total: brand.assets.length,
+      logos: brand.assets.filter(a => a.category === 'LOGO').length,
+      products: brand.assets.filter(a => a.category === 'PRODUCT').length,
+      campaigns: brand.assets.filter(a => a.category === 'CAMPAIGN').length,
+    }
 
-    // Return full brand data
+    // Return full brand data with access
     return new Response(JSON.stringify({
       brand: {
-        ...brand,
+        id: brand.id,
+        name: brand.name,
+        about: brand.about,
+        website: brand.website,
+        contactEmail: brand.contactEmail,
+        instagramHandle: brand.instagramHandle,
+        twitterHandle: brand.twitterHandle,
+        linkedinHandle: brand.linkedinHandle,
+        company: brand.company,
+        assets: brand.assets,
+        assetCounts,
         hasAccess: true,
-        accessStatus: brand.receivedAccessRequests[0]?.status || 'APPROVED',
-        accessType: brand.receivedAccessRequests[0]?.accessType || 'FULL',
-        isOwnBrand
-      },
-      notes
+        accessType: brand.receivedAccessRequests.length > 0 
+          ? brand.receivedAccessRequests[0].accessType 
+          : 'FULL'
+      }
     }), { status: 200 })
-
   } catch (error) {
     console.error('Get brand error:', error)
     return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 })
